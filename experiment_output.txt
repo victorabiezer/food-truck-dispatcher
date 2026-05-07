@@ -1,0 +1,51 @@
+warning: fields `id` and `priority` are never read
+  --> src/main.rs:31:5
+   |
+29 | struct Task
+   |        ---- fields in this struct
+30 | {
+31 |     id: u32,           // the order number — every customer gets a unique ticket
+   |     ^^
+...
+35 |     priority: u32,     // urgency level — higher means serve sooner (aging system ready for future)
+   |     ^^^^^^^^
+   |
+   = note: `Task` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` on by default
+
+warning: `food-truck-dispatcher` (bin "food-truck-dispatcher") generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running `target/debug/food-truck-dispatcher`
+Food truck is open!
+
+== FIFO simulation ==
+1000 tasks, 70% IO / 30% CPU, 8 workers, cap 100%
+
+-- results --
+total runtime        : 25638 ms
+makespan             : 25635 ms
+tasks completed      : 1000  (IO=712, CPU=288)
+avg wait time        : 2746.60 ms
+avg turnaround time  : 2946.60 ms
+max wait time        : 8237 ms
+avg CPU usage        : 96.83 %
+avg workers active   : 7.93 / 8
+monitor samples      : 2118
+monitor csv          : monitor_log.csv
+
+== Optimized simulation ==
+1000 tasks, 70% IO / 30% CPU, 8 workers, cap 100%
+
+-- results --
+total runtime        : 25663 ms
+makespan             : 25660 ms
+tasks completed      : 1000  (IO=711, CPU=289)
+avg wait time        : 2742.15 ms
+avg turnaround time  : 2942.15 ms
+max wait time        : 7571 ms
+avg CPU usage        : 97.65 %
+avg workers active   : 7.92 / 8
+monitor samples      : 2110
+monitor csv          : monitor_log.csv
+
+Food truck is closed! All orders complete.
