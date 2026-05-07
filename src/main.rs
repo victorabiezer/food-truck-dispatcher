@@ -4,6 +4,8 @@ use std::collections::VecDeque;
 use std::sync::{Arc, Mutex};
 use std::fs::File;
 use std::io::Write;
+use rand::{SeedableRng, Rng};
+use rand::rngs::StdRng;
 
 // =====================================
 // BACKEND SYSTEM (EXPLAINED)
@@ -50,23 +52,22 @@ struct CompletedTask
 // Bbefore the truck opens, we  1000 customer orders are generated 
 // 70% are simple IO orders, 30% are complex CPU orders
 // orders are spaced 20ms apart (based on instryctions) simulating a steady stream of customers
-fn make_tasks() -> Vec<Task>
+fn make_tasks() -> Vec<Task> 
 {
+    let mut rng = StdRng::seed_from_u64(42); // fixed seed for reproducible runs
     let mut tasks = Vec::new();
     for i in 0..1000u32
     {
-        tasks.push(Task
+        tasks.push(Task 
         {
             id: i,
-            arrival_time: i as u64 * 20, // one customer every 20ms
-            kind: if rand::random::<u8>() < 179 { TaskKind::IO } else { TaskKind::CPU }, // 70/30 split
-            duration: 200, // every order takes 200ms to fulfill
-            priority: 0,   // everyone starts equal — aging can change this later
+            arrival_time: i as u64 * 20,
+            kind: if rng.r#gen::<u8>() < 179 { TaskKind::IO } else { TaskKind::CPU },
+            duration: 200,            priority: 0,
         });
     }
     tasks
 }
-
 
 
 fn run_simulation(mode: &str, arrival_interval: u64)
